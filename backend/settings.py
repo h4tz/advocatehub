@@ -43,7 +43,10 @@ INSTALLED_APPS = [
     'clientapi',
     'advocateshub',
     'lawyerapi',
-    'bookingapi'
+    'bookingapi',
+    'chat',
+    'channels',
+    'reviews',
 ]
 
 MIDDLEWARE = [
@@ -90,9 +93,9 @@ WSGI_APPLICATION = 'backend.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'AdvovateHUBDB',
+        'NAME': 'Advocates',
         "USER":'postgres',
-        'PASSWORD':'Advocate',
+        "PASSWORD" : "postgres",
         'HOST':'localhost',
         'PORT':'5432',
     }
@@ -122,11 +125,11 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Asia/Kolkata'
 
 USE_I18N = True
 
-USE_TZ = True
+USE_TZ = False
 
 
 # Static files (CSS, JavaScript, Images)
@@ -161,8 +164,27 @@ MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
 
 # Allow frontend requests
-CORS_ALLOW_ALL_ORIGINS = True  # or use whitelist
+# ✅ Allow only your frontend (not '*')
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:5173",
+]
+
+# ✅ Allow cookies and CSRF tokens
+CORS_ALLOW_CREDENTIALS = True
+
+# Optional: if you're using CSRF cookie
+CSRF_TRUSTED_ORIGINS = [
+    "http://localhost:5173",
+]
 
 
 
 
+# Channels setup
+ASGI_APPLICATION = 'backend.asgi.application'
+
+CHANNEL_LAYERS = {
+    'default': {
+        'BACKEND': 'channels.layers.InMemoryChannelLayer',  # For dev; use Redis in production
+    },
+}

@@ -3,6 +3,8 @@ from .models import User
 from clientapi.models import Client
 from lawyerapi.models import Lawyer
 from bookingapi.models import Booking
+from chat.models import ChatMessage
+
 
 class RegisterSerializer(serializers.ModelSerializer):
     password = serializers.CharField(write_only=True)
@@ -23,6 +25,8 @@ class RegisterSerializer(serializers.ModelSerializer):
     availability = serializers.CharField(required=False)
     price = serializers.DecimalField(max_digits=10, decimal_places=2, required=False)
     available_slots = serializers.JSONField(required=False)
+    languages = serializers.CharField(required=False)
+    
 
     # Client-specific fields
     language = serializers.CharField(required=False)
@@ -34,7 +38,7 @@ class RegisterSerializer(serializers.ModelSerializer):
             'username', 'name', 'email', 'phone', 'profile', 'password', 'confirm_password', 'role',
             'cnic', 'education', 'degree', 'aadhar', 'pan', 'bar', 'location', 'court_level',
             'case_types', 'experience', 'availability', 'price', 'available_slots',
-            'language', 'dob'
+            'language', 'dob','languages',
         ]
 
     def validate(self, data):
@@ -80,6 +84,7 @@ class RegisterSerializer(serializers.ModelSerializer):
                     availability=validated_data.get('availability'),
                     price=validated_data.get('price'),
                     available_slots=validated_data.get('available_slots', {}),
+                    languages=validated_data.get('languages'),
                 )
 
             return user
@@ -90,26 +95,46 @@ class RegisterSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError({"server_error": str(e)})
 
 
-# _______________________________________________________________________________________________________
+
+# ✅ Nested User Serializer
+class UserNestedSerializer(serializers.ModelSerializer):
+    date_joined = serializers.DateTimeField(format="%Y-%m-%d", read_only=True)
+    class Meta:
+        model = User
+        fields = ['id', 'name', 'email','phone', 'profile', 'date_joined',]
+
+# ✅ Client Serializer
+class ClientSerializer(serializers.ModelSerializer):
+    user = UserNestedSerializer()  # Nested user info
+
+    class Meta:
+        model = Client
+        fields = ['id', 'user', 'dob','language']
+
+# ✅ Lawyer Serializer
 class LawyerSerializer(serializers.ModelSerializer):
-    user_profile = serializers.SerializerMethodField()
+    user = UserNestedSerializer()  # replaces user_profile
+
     class Meta:
         model = Lawyer
         fields = [
-            'id', 'user', 'cnic', 'education', 'degree', 'aadhar', 'pan', 'bar','user_profile',
+            'id', 'user', 'cnic', 'education', 'degree', 'aadhar', 'pan', 'bar',
             'location', 'court_level', 'case_types', 'experience',
-            'availability', 'price', 'profile_status', 'available_slots'
+            'availability', 'price', 'profile_status', 'available_slots', 'languages',
         ]
-    def get_user_profile(self, obj):
-        request = self.context.get('request')
-        if obj.user.profile:
-            return request.build_absolute_uri(obj.user.profile.url)
-        return None
 
 # _____________________________________________________________________________
 class BookingSerializer(serializers.ModelSerializer):
+    client = ClientSerializer(read_only=True)  # ✅ full nested client info
+    client_name = serializers.CharField(source='client.user.name', read_only=True)
     class Meta:
         model = Booking
         fields = '__all__'
 
-        
+# ______________________________________________________________________________________
+class ChatMessageSerializer(serializers.ModelSerializer):
+    sender_name = serializers.CharField(source='sender.name', read_only=True)
+
+    class Meta:
+        model = ChatMessage
+        fields = ['id', 'booking', 'sender', 'sender_name', 'message', 'timestamp']

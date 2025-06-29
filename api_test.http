@@ -1,0 +1,72 @@
+
+@baseUrl = http://127.0.0.1:8000
+
+# Make sure this token is correct and doesn't have extra spaces or characters
+@clientJwtToken = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzUxMzA2ODQwLCJpYXQiOjE3NTEyMjA0NDAsImp0aSI6IjYxOTk2YmQxMTM4OTRlZTk5NzM0NzFiNTc5NDA3YzFiIiwidXNlcl9pZCI6MX0.Cubz5r1TYA5UMpy9kKjkwhC6n2fIlmDUwEVQ9RGcRZM
+# Make sure this is a number (e.g., 2, 3, etc.)
+@lawyerUserId = 1 
+
+
+### 1. Get JWT Token
+POST {{baseUrl}}/userapi/login/
+Content-Type: application/json
+
+{
+    "username": "hari",
+    "password": "hari@1234"
+}
+
+### 2. Create a New Review
+POST {{baseUrl}}/api/reviews/
+Content-Type: application/json
+Authorization: Bearer {{clientJwtToken}}
+
+{
+    "lawyer_id": {{lawyerUserId}},
+    "rating": 5,
+    "feedback": "This lawyer provided excellent and clear advice. Highly recommended for property cases!"
+}
+
+### 3. Create Another Review 
+# Use the same client user or a different client 
+POST {{baseUrl}}/api/reviews/
+Content-Type: application/json
+Authorization: Bearer {{clientJwtToken}}
+
+{
+    "lawyer_id": {{lawyerUserId}},
+    "rating": 4,
+    "feedback": "Very knowledgeable, but consultation started a bit late. Still good advice."
+}
+
+### 4. Get All Reviews for a Specific Lawyer 
+# This endpoint does not require authentication (AllowAny).
+GET {{baseUrl}}/api/lawyers/{{lawyerUserId}}/reviews/
+Accept: application/json
+
+### 5. Get a Single Lawyer's Profile with Aggregated Review Data
+# This endpoint does not require authentication (AllowAny).
+GET {{baseUrl}}/api/lawyers/{{lawyerUserId}}/
+Accept: application/json
+
+### 6. Get a Specific Review by ID 
+# This endpoint requires authentication.
+GET {{baseUrl}}/api/reviews/5/ 
+Accept: application/json
+Authorization: Bearer {{clientJwtToken}}
+
+### 7. Update a Review 
+# Requires authentication by the user who created the review.
+PUT {{baseUrl}}/api/reviews/5/
+Content-Type: application/json
+Authorization: Bearer {{clientJwtToken}}
+
+{
+    "rating": 4,
+    "feedback": "Updated: Very knowledgeable, but consultation started a bit late. Still good advice!"
+}
+
+### 8. Delete a Review
+# Requires authentication by the user who created the review.
+DELETE {{baseUrl}}/api/reviews/5/
+Authorization: Bearer {{clientJwtToken}}
