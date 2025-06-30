@@ -23,6 +23,7 @@ urlpatterns = [
     path('api-auth/', include('rest_framework.urls')),
     path('userapi/', include('advocateshub.urls')),  # so frontend hits /userapi/register/
     path('', include('reviews.urls')),
+    path('api/', include('website_feedback.urls')),
 ]
 
 

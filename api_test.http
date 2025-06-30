@@ -3,7 +3,7 @@
 
 # Make sure this token is correct and doesn't have extra spaces or characters
 @clientJwtToken = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzUxMzA2ODQwLCJpYXQiOjE3NTEyMjA0NDAsImp0aSI6IjYxOTk2YmQxMTM4OTRlZTk5NzM0NzFiNTc5NDA3YzFiIiwidXNlcl9pZCI6MX0.Cubz5r1TYA5UMpy9kKjkwhC6n2fIlmDUwEVQ9RGcRZM
-# Make sure this is a number (e.g., 2, 3, etc.)
+# Make sure this is a number 
 @lawyerUserId = 1 
 
 
@@ -40,7 +40,6 @@ Authorization: Bearer {{clientJwtToken}}
 }
 
 ### 4. Get All Reviews for a Specific Lawyer 
-# This endpoint does not require authentication (AllowAny).
 GET {{baseUrl}}/api/lawyers/{{lawyerUserId}}/reviews/
 Accept: application/json
 
@@ -69,4 +68,40 @@ Authorization: Bearer {{clientJwtToken}}
 ### 8. Delete a Review
 # Requires authentication by the user who created the review.
 DELETE {{baseUrl}}/api/reviews/5/
+Authorization: Bearer {{clientJwtToken}}
+
+
+
+### 9. Submit Website Feedback
+# Requires authentication.
+POST {{baseUrl}}/api/website-feedback/
+Content-Type: application/json
+Authorization: Bearer {{clientJwtToken}}
+
+{
+    "rating": 5,
+    "feedback_text": "The website is very user-friendly and the lawyer search is excellent!"
+}
+
+### 10. Get All Website Feedback
+GET {{baseUrl}}/api/website-feedback/
+Accept: application/json
+
+### 11. Get Specific Website Feedback by ID
+GET {{baseUrl}}/api/website-feedback/2/
+Accept: application/json
+Authorization: Bearer {{clientJwtToken}}
+
+### 12. Update Website Feedback 
+PUT {{baseUrl}}/api/website-feedback/1/
+Content-Type: application/json
+Authorization: Bearer {{clientJwtToken}}
+
+{
+    "rating": 4,
+    "feedback_text": "Updated: The website is great, but sometimes slow on mobile."
+}
+
+### 13. Delete Website Feedback 
+DELETE {{baseUrl}}/api/website-feedback/1/
 Authorization: Bearer {{clientJwtToken}}
