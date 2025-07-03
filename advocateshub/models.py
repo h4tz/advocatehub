@@ -10,7 +10,7 @@ class User(AbstractUser):
     )
 
     name = models.CharField(max_length=100)
-    email = models.EmailField(unique=True)
+    email = models.EmailField(unique=False) #set false for dev change to true later 
     phone = models.CharField(max_length=15)
     profile = models.FileField(upload_to='profiles/', null=True, blank=True)
     role = models.CharField(max_length=10, choices=ROLE_CHOICES)

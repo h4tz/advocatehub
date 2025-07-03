@@ -6,6 +6,7 @@ from .views import ReviewViewSet, LawyerReviewsAPIView, LawyerDetailWithReviewsA
 router = DefaultRouter()
 router.register(r'reviews', ReviewViewSet)
 
+
 urlpatterns = [
     path('api/', include(router.urls)), 
     path('api/lawyers/<int:lawyer_id>/reviews/', LawyerReviewsAPIView.as_view(), name='lawyer-reviews'),

@@ -2,9 +2,8 @@
 @baseUrl = http://127.0.0.1:8000
 
 # Make sure this token is correct and doesn't have extra spaces or characters
-@clientJwtToken = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzUxMzA2ODQwLCJpYXQiOjE3NTEyMjA0NDAsImp0aSI6IjYxOTk2YmQxMTM4OTRlZTk5NzM0NzFiNTc5NDA3YzFiIiwidXNlcl9pZCI6MX0.Cubz5r1TYA5UMpy9kKjkwhC6n2fIlmDUwEVQ9RGcRZM
-# Make sure this is a number 
-@lawyerUserId = 1 
+@clientJwtToken = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzUxNjQ5MTY4LCJpYXQiOjE3NTE1NjI3NjgsImp0aSI6ImQ0MTMyN2MwNzJjNTQ0ZDM4ZGJlNDM1Y2Q1NmYyZmZiIiwidXNlcl9pZCI6MX0.xPX61VnZj85PTPhI7UU2gh-I6_vaPfnoFi6ZYwP3dsQ
+@lawyerUserId = 2
 
 
 ### 1. Get JWT Token
@@ -50,13 +49,13 @@ Accept: application/json
 
 ### 6. Get a Specific Review by ID 
 # This endpoint requires authentication.
-GET {{baseUrl}}/api/reviews/5/ 
+GET {{baseUrl}}/api/reviews/6/ 
 Accept: application/json
 Authorization: Bearer {{clientJwtToken}}
 
 ### 7. Update a Review 
 # Requires authentication by the user who created the review.
-PUT {{baseUrl}}/api/reviews/5/
+PUT {{baseUrl}}/api/reviews/6/
 Content-Type: application/json
 Authorization: Bearer {{clientJwtToken}}
 
@@ -93,7 +92,7 @@ Accept: application/json
 Authorization: Bearer {{clientJwtToken}}
 
 ### 12. Update Website Feedback 
-PUT {{baseUrl}}/api/website-feedback/1/
+PUT {{baseUrl}}/api/website-feedback/2/
 Content-Type: application/json
 Authorization: Bearer {{clientJwtToken}}
 
