@@ -2,8 +2,8 @@
 @baseUrl = http://127.0.0.1:8000
 
 # Make sure this token is correct and doesn't have extra spaces or characters
-@clientJwtToken = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzUxNjQ5MTY4LCJpYXQiOjE3NTE1NjI3NjgsImp0aSI6ImQ0MTMyN2MwNzJjNTQ0ZDM4ZGJlNDM1Y2Q1NmYyZmZiIiwidXNlcl9pZCI6MX0.xPX61VnZj85PTPhI7UU2gh-I6_vaPfnoFi6ZYwP3dsQ
-@lawyerUserId = 2
+@clientJwtToken = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzUxNzMyMDcxLCJpYXQiOjE3NTE2NDU2NzEsImp0aSI6ImVlYjM1MjljN2VlMTRlNTJhZTE5YWE3OTRiYzY5MjQyIiwidXNlcl9pZCI6MX0.qooFhUQ7SnjY9wSZpbYesIDLO4NjHkuOtB5zqChek2U
+@lawyerUserId = 1
 
 
 ### 1. Get JWT Token

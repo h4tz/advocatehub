@@ -33,7 +33,7 @@ urlpatterns = [
     path('reject-booking/<int:booking_id>/', RejectBookingAPI.as_view(), name='reject-booking'),
 
     path('approved-lawyers/', ApprovedLawyersAPIView.as_view(), name='approved-lawyers'),
-    path('lawyer/<int:id>/', LawyerDetailAPI.as_view(), name='lawyer-detail'),
+    # path('lawyer/<int:id>/', LawyerDetailAPI.as_view(), name='lawyer-detail'),
 
     # ✅ Admin - Lawyer Approval
     path('admin-register/', AdminRegisterView.as_view(), name='admin-register'),
