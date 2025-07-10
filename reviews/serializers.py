@@ -1,6 +1,6 @@
 
 from rest_framework import serializers
-from .models import Review
+from .models import Review, ReviewReply
 from lawyerapi.models import Lawyer 
 from advocateshub.models import User 
 from clientapi.models import Client 
@@ -19,14 +19,24 @@ class LawyerSerializerForReviews(serializers.ModelSerializer):
             'price', 'languages', 'average_rating', 'review_count'
         ] # Include relevant lawyer fields and aggregated review fields
 
+class ReviewReplySerializer(serializers.ModelSerializer):
+    lawyer_name = serializers.CharField(source='lawyer.user.username', read_only=True)
+
+    class Meta:
+        model = ReviewReply
+        fields = ['id', 'lawyer_name', 'reply_text', 'created_at']
+        read_only_fields = ['id', 'lawyer_name', 'created_at']
+
+
+
 class ReviewSerializer(serializers.ModelSerializer):
     user = UserSerializer(read_only=True) 
     lawyer = LawyerSerializerForReviews(read_only=True) # Display lawyer details
-
+    reply = ReviewReplySerializer(read_only=True)
     class Meta:
         model = Review
-        fields = ['id', 'user', 'lawyer', 'rating', 'feedback', 'created_at']
-        read_only_fields = ['user', 'lawyer', 'created_at'] # User and lawyer are set by view, not directly by client in POST
+        fields = ['id', 'user', 'lawyer', 'rating', 'feedback', 'created_at', 'reply']
+        read_only_fields = ['user', 'lawyer', 'created_at', 'reply'] # User and lawyer are set by view, not directly by client in POST
 
     def create(self, validated_data):
         user_for_validation = self.context['request'].user 

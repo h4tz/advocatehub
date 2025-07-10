@@ -7,9 +7,9 @@ from rest_framework.permissions import IsAuthenticated, AllowAny
 from django.shortcuts import get_object_or_404
 from django.contrib.auth import get_user_model
 
-from .models import Review
+from .models import Review, ReviewReply
 from lawyerapi.models import Lawyer 
-from .serializers import ReviewSerializer, LawyerSerializerForReviews 
+from .serializers import ReviewSerializer, LawyerSerializerForReviews, ReviewReplySerializer
 
 User = get_user_model()
 
@@ -27,6 +27,38 @@ class ReviewViewSet(viewsets.ModelViewSet):
         if user_id is not None:
             queryset = queryset.filter(user__id=user_id)
         return queryset
+
+
+# ✅ NEW: REPLY VIEWSET (for Lawyers only)
+class ReviewReplyViewSet(viewsets.ModelViewSet):
+    queryset = ReviewReply.objects.all()
+    serializer_class = ReviewReplySerializer
+    permission_classes = [IsAuthenticated]
+
+    def perform_create(self, serializer):
+        user = self.request.user
+        try:
+            lawyer = Lawyer.objects.get(user=user)
+        except Lawyer.DoesNotExist:
+            raise PermissionDenied("Only lawyers can reply to reviews.")
+
+        review_id = self.request.data.get('review')
+        if not review_id:
+            raise ValidationError({"review": "Review ID is required."})
+        
+        review = get_object_or_404(Review, id=review_id)
+
+        # Prevent duplicate replies
+        if ReviewReply.objects.filter(review=review).exists():
+            raise ValidationError("This review already has a reply.")
+
+        serializer.save(lawyer=lawyer, review=review)
+
+    def get_queryset(self):
+        user = self.request.user
+        if user.is_staff:
+            return ReviewReply.objects.all()
+        return ReviewReply.objects.filter(lawyer__user=user)
 
 class LawyerReviewsAPIView(APIView):
     permission_classes = [AllowAny] # Reviews can be publicly viewed

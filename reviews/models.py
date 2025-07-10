@@ -41,6 +41,30 @@ class Review(models.Model):
         return f"Review by {self.user.username} for {self.lawyer.user.username}: {self.rating} stars"
 
 # --- Signals to update Lawyer's average_rating and review_count ---
+class ReviewReply(models.Model):
+    review = models.OneToOneField(
+        Review,
+        on_delete=models.CASCADE,
+        related_name='reply',
+        help_text="The review being replied to."
+    )
+    lawyer = models.ForeignKey(
+        Lawyer,
+        on_delete=models.CASCADE,
+        help_text="The lawyer replying to the review."
+    )
+    reply_text = models.TextField(
+        help_text="Reply from the lawyer to the user review."
+    )
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        verbose_name = "Review Reply"
+        verbose_name_plural = "Review Replies"
+
+    def __str__(self):
+        return f"Reply by {self.lawyer.user.username} to review {self.review.id}"
+
 
 @receiver(post_save, sender=Review)
 def update_lawyer_rating_on_save(sender, instance, **kwargs):

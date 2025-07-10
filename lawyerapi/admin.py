@@ -4,7 +4,7 @@ from .models import Lawyer
 
 @admin.register(Lawyer)
 class LawyerAdmin(admin.ModelAdmin):
-    list_display = (
+    list_display = (    
         'user', 'cnic', 'location', 'court_level', 'profile_status', 
         'price', 'average_rating', 'review_count'
     )

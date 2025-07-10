@@ -2,9 +2,18 @@
 @baseUrl = http://127.0.0.1:8000
 
 # Make sure this token is correct and doesn't have extra spaces or characters
-@clientJwtToken = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzUxNzMyMDcxLCJpYXQiOjE3NTE2NDU2NzEsImp0aSI6ImVlYjM1MjljN2VlMTRlNTJhZTE5YWE3OTRiYzY5MjQyIiwidXNlcl9pZCI6MX0.qooFhUQ7SnjY9wSZpbYesIDLO4NjHkuOtB5zqChek2U
+@clientJwtToken = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzUyMjE4MTY2LCJpYXQiOjE3NTIxMzE3NjYsImp0aSI6IjFiY2UwOWY2N2QwMzQ2YmJhMjlhNWE4ZjZlYWExNzM5IiwidXNlcl9pZCI6MTR9.n45DdG3iFS8Fena3F0HVp1pBABn4G-YIIEcV46rHu6s
 @lawyerUserId = 1
+@lawyerJwtToken = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzUyMjE4MjU0LCJpYXQiOjE3NTIxMzE4NTQsImp0aSI6ImM3MTYwYjBkNDFjNjRiODY5ODZlNWEyZWQwZWQzOWEyIiwidXNlcl9pZCI6MX0.WL8E2khuNpnaMz4OgRNVVl1wa1IMV7MOyH0LiYlAJEI
 
+### CLIENT LOGIN
+POST {{baseUrl}}/userapi/login/
+Content-Type: application/json
+
+{
+    "username": "xyz@gmail.com",
+    "password": "try@2003"
+}
 
 ### 1. Get JWT Token
 POST {{baseUrl}}/userapi/login/
@@ -104,3 +113,37 @@ Authorization: Bearer {{clientJwtToken}}
 ### 13. Delete Website Feedback 
 DELETE {{baseUrl}}/api/website-feedback/1/
 Authorization: Bearer {{clientJwtToken}}
+
+### 14. Lawyer Creates a Reply to a Review
+POST {{baseUrl}}/api/review-replies/
+Content-Type: application/json
+Authorization: Bearer {{lawyerJwtToken}}  
+
+{
+  "review": 6,
+  "reply_text": "Thank you for the kind feedback. Glad I could help!"
+}
+
+### 15. Get All Review Replies
+GET {{baseUrl}}/api/review-replies/
+Accept: application/json
+Authorization: Bearer {{lawyerJwtToken}}
+
+### 16. Get a Review Reply by ID
+GET {{baseUrl}}/api/review-replies/1/
+Accept: application/json
+Authorization: Bearer {{lawyerJwtToken}}
+
+### 17. Update a Review Reply
+PUT {{baseUrl}}/api/review-replies/1/
+Content-Type: application/json
+Authorization: Bearer {{lawyerJwtToken}}
+
+{
+  "reply_text": "Updated: Thanks! Let me know if you need anything else."
+}
+
+
+### 18. Delete a Review Reply
+DELETE {{baseUrl}}/api/review-replies/1/
+Authorization: Bearer {{lawyerJwtToken}}
